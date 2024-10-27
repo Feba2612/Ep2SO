@@ -1,31 +1,25 @@
-import java.util.List;
 import java.util.Random;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class Reader extends Thread {
-    private final List<String> baseDeDados;
-    private final ReentrantReadWriteLock lock;
+public class Reader implements Runnable {
+    private final Database db;
+    private final int accessCount;
+    private final int sleepTimeMs;
+    private final Random random = new Random();
 
-    public Reader(List<String> baseDeDados, ReentrantReadWriteLock lock) {
-        this.baseDeDados = baseDeDados;
-        this.lock = lock;
+    public Reader(Database db, int accessCount, int sleepTimeMs) {
+        this.db = db;
+        this.accessCount = accessCount;
+        this.sleepTimeMs = sleepTimeMs;
     }
 
     @Override
     public void run() {
-        Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            int pos = random.nextInt(baseDeDados.size());
-            lock.readLock().lock();
-            try {
-                String palavra = baseDeDados.get(pos);  // Leitura da palavra
-                // Simula alguma operação com a palavra lida
-            } finally {
-                lock.readLock().unlock();
-            }
+        for (int i = 0; i < accessCount; i++) {
+            int index = random.nextInt(db.getSize());
+            db.read(index); // Acesso de leitura
         }
         try {
-            Thread.sleep(1);  // Simula tempo de processamento
+            Thread.sleep(sleepTimeMs); // Validação (simulação de espera)
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -1,30 +1,25 @@
-import java.util.List;
 import java.util.Random;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class Writer extends Thread {
-    private final List<String> baseDeDados;
-    private final ReentrantReadWriteLock lock;
+public class Writer implements Runnable {
+    private final Database db;
+    private final int accessCount;
+    private final int sleepTimeMs;
+    private final Random random = new Random();
 
-    public Writer(List<String> baseDeDados, ReentrantReadWriteLock lock) {
-        this.baseDeDados = baseDeDados;
-        this.lock = lock;
+    public Writer(Database db, int accessCount, int sleepTimeMs) {
+        this.db = db;
+        this.accessCount = accessCount;
+        this.sleepTimeMs = sleepTimeMs;
     }
 
     @Override
     public void run() {
-        Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            int pos = random.nextInt(baseDeDados.size());
-            lock.writeLock().lock();
-            try {
-                baseDeDados.set(pos, "MODIFICADO");  // Modificação da palavra
-            } finally {
-                lock.writeLock().unlock();
-            }
+        for (int i = 0; i < accessCount; i++) {
+            int index = random.nextInt(db.getSize());
+            db.write(index); // Acesso de escrita
         }
         try {
-            Thread.sleep(1);  // Simula tempo de processamento
+            Thread.sleep(sleepTimeMs); // Validação (simulação de espera)
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
