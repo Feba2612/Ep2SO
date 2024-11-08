@@ -56,6 +56,10 @@ public class ReaderWriterSimulator {
             double averageTime = totalTime / (double) TOTAL_RUNS;
             System.out.printf("Proporção: %d Readers, %d Writers - Tempo médio: %.2f ms\n", readerCount, writerCount, averageTime);
         }
+
+        // Imprime o overhead de sincronização após todas as execuções para cada configuração de controle
+        System.out.println("\nOverhead de sincronização para " + (controlled ? "execução com controle:" : "execução sem controle:"));
+        db.printSyncOverhead();
     }
 
     private static List<Thread> createThreads(int readerCount, int writerCount, Database db) {

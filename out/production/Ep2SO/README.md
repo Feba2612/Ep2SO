@@ -48,7 +48,9 @@ A execução é repetida com diferentes proporções de leitores e escritores, v
 
 ## Saída Esperada: 
 
-Proporção Leitores: 50, Escritores: 50
-Com controle de acesso: Média de 100ms
-Sem controle de acesso: Média de 200ms
+Simulação com controle de leitores/escritores:
+Proporção: 0 Readers, 100 Writers - Tempo médio: 13,26 ms
+Proporção: 1 Readers, 99 Writers - Tempo médio: 13,22 ms
+Proporção: 2 Readers, 98 Writers - Tempo médio: 12,18 ms
+Proporção: 3 Readers, 97 Writers - Tempo médio: 11,42 ms
 ...
